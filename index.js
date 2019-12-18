@@ -1,85 +1,5 @@
 const {post} = require('superagent');
-const defaultEmbed = {
-  title: null,
-  color: null,
-  description: null,
-  timestamp: null,
-  thumbnail: {
-    url: null
-  },
-  image: {
-    url: null
-  },
-  author: {
-    name: null,
-    icon_url: null,
-    url: null
-  },
-  footer: {
-    text: null,
-    icon_url: null
-  },
-  fields: []
-},
-  check = (req) => {
-    let embed = req.embeds[0];
-    let i = [];
-    if(req.content !== "") i.push(true);
-    if(embed.hasOwnProperty("title")) i.push(true);
-    if(embed.hasOwnProperty("description")) i.push(true);
-    if(embed.hasOwnProperty("thumbnail")){
-      if(embed.thumbnail.url) i.push(true)
-    }
-    if(embed.hasOwnProperty("image")){
-      if(embed.image.url) i.push(true)
-    }
-    if(embed.hasOwnProperty("author")){
-      if(embed.author.name) i.push(true);
-      if(embed.author.icon_url) i.push(true);
-      if(embed.author.url) i.push(true);
-    }
-    if(embed.hasOwnProperty("footer")){
-      if(embed.footer.text) i.push(true);
-      if(embed.footer.icon_url) i.push(true);
-    }
-    if(embed.hasOwnProperty("fields")){
-      if(!Array.isArray(embed.fields)) throw new Error(`[Webhook Service] | "embed.fields" has to be an array!`);
-      if(embed.fields.length !== 0) i.push(true)
-    }
-    if(i.length === 0) return false;
-    return true;
-  },
-  getEmbed = (req) => {
-    let embed = req.embeds[0], i = [];
-    if(embed.hasOwnProperty("title")){
-      if(embed.title) i.push("Title");
-    }
-    if(embed.hasOwnProperty("description")){
-      if(embed.description) i.push("Description");
-    }
-    if(embed.hasOwnProperty("thumbnail")){
-      if(embed.thumbnail.url) i.push("Thumbnail")
-    }
-    if(embed.hasOwnProperty("image")){
-      if(embed.image.url) i.push("Image")
-    }
-    if(embed.hasOwnProperty("author")){
-      if(embed.author.name) i.push("author.name");
-      if(embed.author.icon_url) i.push("author.icon_url");
-      if(embed.author.url) i.push('author.url');
-    }
-    if(embed.hasOwnProperty("footer")){
-      if(embed.footer.text) i.push("footer.text");
-      if(embed.footer.icon_url) i.push("footer.icon_url");
-    }
-    if(embed.hasOwnProperty("fields")){
-      if(!Array.isArray(embed.fields)) throw new Error(`[Webhook Service] | "embed.fields" has to be an array!`);
-      if(embed.fields.length !== 0) i.push("fields")
-    }
-    if(i.length === 0) return [];
-    return [embed];
-  },
-  Colors = {
+const Colors = {
     DEFAULT: 0x000000,
     WHITE: 0xFFFFFF,
     AQUA: 0x1ABC9C,
@@ -129,7 +49,28 @@ module.exports = class Webhook{
     if(typeof url !== "string") throw new Error(`[Webhook Service] | The 'url' has to be a string!`);
     if(!url.toString().includes(`discordapp.com/api/webhooks/`)) throw new Error(`[Webhook Service] | The 'url' you provided isn't valid!`);
     this.webhook = url;
-    this.embed = defaultEmbed;
+    this.embed = {
+      title: null,
+      color: null,
+      description: null,
+      timestamp: null,
+      thumbnail: {
+        url: null
+      },
+      image: {
+        url: null
+      },
+      author: {
+        name: null,
+        icon_url: null,
+        url: null
+      },
+      footer: {
+        text: null,
+        icon_url: null
+      },
+      fields: []
+    };
     this.request = {
       "content": "",
       "embeds": [this.embed],
@@ -248,6 +189,63 @@ module.exports = class Webhook{
     return this;
   };
   send(){
+    const check = (req) => {
+      let embed = req.embeds[0];
+      let i = [];
+      if(req.content !== "") i.push(true);
+      if(embed.hasOwnProperty("title")) i.push(true);
+      if(embed.hasOwnProperty("description")) i.push(true);
+      if(embed.hasOwnProperty("thumbnail")){
+        if(embed.thumbnail.url) i.push(true)
+      }
+      if(embed.hasOwnProperty("image")){
+        if(embed.image.url) i.push(true)
+      }
+      if(embed.hasOwnProperty("author")){
+        if(embed.author.name) i.push(true);
+        if(embed.author.icon_url) i.push(true);
+        if(embed.author.url) i.push(true);
+      }
+      if(embed.hasOwnProperty("footer")){
+        if(embed.footer.text) i.push(true);
+        if(embed.footer.icon_url) i.push(true);
+      }
+      if(embed.hasOwnProperty("fields")){
+        if(!Array.isArray(embed.fields)) throw new Error(`[Webhook Service] | "embed.fields" has to be an array!`);
+        if(embed.fields.length !== 0) i.push(true)
+      }
+      if(i.length === 0) return false;
+      return true;
+    }, getEmbed = (req) => {
+      let embed = req.embeds[0], i = [];
+      if(embed.hasOwnProperty("title")){
+        if(embed.title) i.push("Title");
+      }
+      if(embed.hasOwnProperty("description")){
+        if(embed.description) i.push("Description");
+      }
+      if(embed.hasOwnProperty("thumbnail")){
+        if(embed.thumbnail.url) i.push("Thumbnail")
+      }
+      if(embed.hasOwnProperty("image")){
+        if(embed.image.url) i.push("Image")
+      }
+      if(embed.hasOwnProperty("author")){
+        if(embed.author.name) i.push("author.name");
+        if(embed.author.icon_url) i.push("author.icon_url");
+        if(embed.author.url) i.push('author.url');
+      }
+      if(embed.hasOwnProperty("footer")){
+        if(embed.footer.text) i.push("footer.text");
+        if(embed.footer.icon_url) i.push("footer.icon_url");
+      }
+      if(embed.hasOwnProperty("fields")){
+        if(!Array.isArray(embed.fields)) throw new Error(`[Webhook Service] | "embed.fields" has to be an array!`);
+        if(embed.fields.length !== 0) i.push("fields")
+      }
+      if(i.length === 0) return [];
+      return [embed];
+    };
     if(check(this.request) === false) throw new Error(`[Webhook Service] | You didn't provide anything to send!`);
     let embed = getEmbed(this.request);
     post(this.webhook)
@@ -256,7 +254,102 @@ module.exports = class Webhook{
       "embeds": embed,
       "avatar_url": this.request.avatar_url,
       "username": this.request.username
+    }).then(() => {
+      this.request.content = "";
+      this.embed = {
+        title: null,
+        color: null,
+        description: null,
+        timestamp: null,
+        thumbnail: {
+          url: null
+        },
+        image: {
+          url: null
+        },
+        author: {
+          name: null,
+          icon_url: null,
+          url: null
+        },
+        footer: {
+          text: null,
+          icon_url: null
+        },
+        fields: []
+      };
+      this.request.embeds = [{
+        title: null,
+        color: null,
+        description: null,
+        timestamp: null,
+        thumbnail: {
+          url: null
+        },
+        image: {
+          url: null
+        },
+        author: {
+          name: null,
+          icon_url: null,
+          url: null
+        },
+        footer: {
+          text: null,
+          icon_url: null
+        },
+        fields: []
+      }];
+      this.request.username = "";
+      this.request.avatar_url = "";
     }).catch(err => {
+      this.request.content = "";
+      this.embed = {
+        title: null,
+        color: null,
+        description: null,
+        timestamp: null,
+        thumbnail: {
+          url: null
+        },
+        image: {
+          url: null
+        },
+        author: {
+          name: null,
+          icon_url: null,
+          url: null
+        },
+        footer: {
+          text: null,
+          icon_url: null
+        },
+        fields: []
+      };
+      this.request.embeds = [{
+        title: null,
+        color: null,
+        description: null,
+        timestamp: null,
+        thumbnail: {
+          url: null
+        },
+        image: {
+          url: null
+        },
+        author: {
+          name: null,
+          icon_url: null,
+          url: null
+        },
+        footer: {
+          text: null,
+          icon_url: null
+        },
+        fields: []
+      }];
+      this.request.username = "";
+      this.request.avatar_url = "";
       throw new Error(`[Webhook Service] | Error while trying to send the webhook: ${err.stack}`)
     })
   };
