@@ -1,6 +1,6 @@
 {
   "name": "elara-hook",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Webhook Service for Discord.. to send messages, embeds. With customizable username & avatar functions",
   "main": "index.js",
   "scripts": {
