@@ -1,7 +1,5 @@
 # Elara Webhooks Builder & Sender.
 
-**NPM:** https://www.npmjs.com/package/elara-hook
-
 
 ```javascript
 const Service = require("elara-hook");
@@ -20,7 +18,8 @@ Webhook
 .setThumbnail("Image URL") // Thumbnail of the embed
 .setImage("Image URL") // Image of the embed
 .addField("Name", "Value", true) // Adds a field to the embed, max 25
-.addBlankEmbed(true) // Adds a blank field to the embed, true, false to make it inline
+.addBlankField(true) // Adds a blank field to the embed, true, false to make it inline
 .setTimestamp(optional_time) //  Adds the timestamp to the embed.
+.setURL(`URL`) // Adds the url for the title.
 .send() // Sends the message/embed.
 ```
