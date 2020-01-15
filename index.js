@@ -54,6 +54,7 @@ module.exports = class Webhook{
       color: null,
       description: null,
       timestamp: null,
+      url: null,
       thumbnail: {
         url: null
       },
@@ -188,6 +189,12 @@ module.exports = class Webhook{
     }
     return this;
   };
+  setURL(url){
+    if(url){
+      this.embed.url = url;
+    };
+    return this;
+  };
   send(){
     const check = (req) => {
       let embed = req.embeds[0];
@@ -209,7 +216,7 @@ module.exports = class Webhook{
       if(embed.hasOwnProperty("footer")){
         if(embed.footer.text) i.push(true);
         if(embed.footer.icon_url) i.push(true);
-      }
+      };
       if(embed.hasOwnProperty("fields")){
         if(!Array.isArray(embed.fields)) throw new Error(`[Webhook Service] | "embed.fields" has to be an array!`);
         if(embed.fields.length !== 0) i.push(true)
@@ -242,6 +249,9 @@ module.exports = class Webhook{
       if(embed.hasOwnProperty("fields")){
         if(!Array.isArray(embed.fields)) throw new Error(`[Webhook Service] | "embed.fields" has to be an array!`);
         if(embed.fields.length !== 0) i.push("fields")
+      };
+      if(embed.hasOwnProperty("url")){
+        if(embed.url) i.push("url");
       }
       if(i.length === 0) return [];
       return [embed];
@@ -254,102 +264,7 @@ module.exports = class Webhook{
       "embeds": embed,
       "avatar_url": this.request.avatar_url,
       "username": this.request.username
-    }).then(() => {
-      this.request.content = "";
-      this.embed = {
-        title: null,
-        color: null,
-        description: null,
-        timestamp: null,
-        thumbnail: {
-          url: null
-        },
-        image: {
-          url: null
-        },
-        author: {
-          name: null,
-          icon_url: null,
-          url: null
-        },
-        footer: {
-          text: null,
-          icon_url: null
-        },
-        fields: []
-      };
-      this.request.embeds = [{
-        title: null,
-        color: null,
-        description: null,
-        timestamp: null,
-        thumbnail: {
-          url: null
-        },
-        image: {
-          url: null
-        },
-        author: {
-          name: null,
-          icon_url: null,
-          url: null
-        },
-        footer: {
-          text: null,
-          icon_url: null
-        },
-        fields: []
-      }];
-      this.request.username = "";
-      this.request.avatar_url = "";
     }).catch(err => {
-      this.request.content = "";
-      this.embed = {
-        title: null,
-        color: null,
-        description: null,
-        timestamp: null,
-        thumbnail: {
-          url: null
-        },
-        image: {
-          url: null
-        },
-        author: {
-          name: null,
-          icon_url: null,
-          url: null
-        },
-        footer: {
-          text: null,
-          icon_url: null
-        },
-        fields: []
-      };
-      this.request.embeds = [{
-        title: null,
-        color: null,
-        description: null,
-        timestamp: null,
-        thumbnail: {
-          url: null
-        },
-        image: {
-          url: null
-        },
-        author: {
-          name: null,
-          icon_url: null,
-          url: null
-        },
-        footer: {
-          text: null,
-          icon_url: null
-        },
-        fields: []
-      }];
-      this.request.username = "";
-      this.request.avatar_url = "";
       throw new Error(`[Webhook Service] | Error while trying to send the webhook: ${err.stack}`)
     })
   };
