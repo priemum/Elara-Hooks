@@ -1,4 +1,5 @@
-const {post} = require('superagent');
+const {post} = require('superagent'),
+      package = require("./package.json");
 const Colors = {
     DEFAULT: 0x000000,
     WHITE: 0xFFFFFF,
@@ -42,7 +43,13 @@ const Colors = {
     else if (color && isNaN(color)) color = 0;
 
     return color;
+  };
+let globalErrors = 0;
+setInterval(() => {
+  if(globalErrors !== 0){
+  globalErrors--; // So you don't get IP banned by Discord for sending too many webhooks..
   }
+}, 5000)
 module.exports = class Webhook{
   constructor(url){
     if(!url) throw new Error(`[Webhook Service] | You didn't provide a webhook URL`);
@@ -258,14 +265,19 @@ module.exports = class Webhook{
     };
     if(check(this.request) === false) throw new Error(`[Webhook Service] | You didn't provide anything to send!`);
     let embed = getEmbed(this.request);
+    if(globalErrors < 5){
     post(this.webhook)
     .send({
       "content": this.request.content,
       "embeds": embed,
       "avatar_url": this.request.avatar_url,
       "username": this.request.username
-    }).catch(err => {
-      throw new Error(`[Webhook Service] | Error while trying to send the webhook: ${err.stack}`)
+    }).end((err) => {
+      if(err) {
+        globalErrors = Math.floor(globalErrors + 1);
+        console.log(`[${package.name}, ${package.version}] - Error |\n\n${err.stack}`);
+      }
     })
+    }
   };
 }
