@@ -42,12 +42,20 @@ const Colors = {
     else if (color && isNaN(color)) color = 0;
 
     return color;
-  };
+  },
+    validateURL = (url) => {
+      let valid = ["discord.com/api/webhooks", "discordapp.com/api/webhooks"], yes = []
+      for (const v of valid) {
+        if(url.toString().includes(v)) yes.push(true);
+      };
+      if(yes.length !== 0) return true;
+      return false;
+    }
 module.exports = class Webhook{
   constructor(url){
     if(!url) throw new Error(`[Webhook Service] | You didn't provide a webhook URL`);
     if(typeof url !== "string") throw new Error(`[Webhook Service] | The 'url' has to be a string!`);
-    if(!url.toString().includes(`discordapp.com/api/webhooks/`)) throw new Error(`[Webhook Service] | The 'url' you provided isn't valid!`);
+    if(validateURL(url) === false) throw new Error(`[Webhook Service] | The 'url' you provided isn't valid!`);
     this.webhook = url;
     this.embed = {
       title: null,

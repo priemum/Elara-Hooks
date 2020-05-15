@@ -1,6 +1,6 @@
 {
   "name": "elara-hook",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Webhook Service for Discord.. to send messages, embeds. With customizable username & avatar functions",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,6 @@
   "license": "MIT",
   "homepage": "https://github.com/elara-bots/Elara-Hooks#readme",
   "dependencies": {
-    "superagent": "^5.1.2"
+    "superagent": "^5.2.2"
   }
 }
