@@ -14,6 +14,6 @@
   "license": "MIT",
   "homepage": "https://github.com/elara-bots/Elara-Hooks#readme",
   "dependencies": {
-    "superagent": "^5.2.2"
+    "superagent": "^6.1.0"
   }
 }
